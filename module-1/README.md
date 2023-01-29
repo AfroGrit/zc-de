@@ -3,25 +3,6 @@
 - Docker and Postgres
 - GCP amd Terraform
 
-### Running terraform and GCP services
-
-```console
-Refresh service-account's auth-token for this session
-gcloud auth application-default login
-
-# Initialize state file (.tfstate)
-terraform init
-
-# Check changes to new infra plan
-terraform plan -var="XXX"
-
-# Create new infra
-terraform apply -var="project=XXX"
-
-# Delete infra after your work, to avoid costs on any running services
-terraform destroy
-```
-
 ### Utilities
 
 ```console
