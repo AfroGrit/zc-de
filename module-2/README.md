@@ -1,4 +1,4 @@
-### Module 2 - Workflow Orchestration
+# Module 2 - Workflow Orchestration
 
 - R&D on data products
 - Need for Cheap storage of Big data
@@ -12,3 +12,11 @@
 2. xtract Load and Transform (ELT)
 
 - Large amounts of data ELT provides data lake support (Schema on read)
+
+#### installation of requirements
+
+```
+which -a pip
+/usr/local/bin/pip
+/../../miniconda3/envs/zc-de/bin/pip
+```
