@@ -63,12 +63,64 @@ FROM afrobq.fhv_non_partitoned AS x;
 
 2. What is the estimated amount of data that will be read when this query is executed on the External Table and the Table?
 
-
-
 ## q.3
+
+~~~~sql
+-- -- q.3
+SELECT COUNT(*) from afrobq.fhv_non_partitoned
+WHERE PUlocationID IS NULL AND DOlocationID IS NULL;
+~~~~
 
 ## q.4
 
 ## q.5
 
+~~~~sql
+-- Create a partitioned table from external table
+CREATE OR REPLACE TABLE afrobq.fhv_partitoned
+PARTITION BY
+  DATE(pickup_datetime) AS
+SELECT * FROM afrobq.fhv_ext;
+
+-- Impact of partition
+-- Scanning 659.68 MB of data
+SELECT DISTINCT(affiliated_base_number)
+FROM afrobq.fhv_non_partitoned
+WHERE DATE(pickup_datetime) BETWEEN '2019-06-01' AND '2019-06-30';
+
+-- Scanning ~31.25 MB of DATA
+SELECT DISTINCT(affiliated_base_number)
+FROM afrobq.fhv_partitoned
+WHERE DATE(pickup_datetime) BETWEEN '2019-06-01' AND '2019-06-30';
+
+
+-- Creating a partition and cluster table
+CREATE OR REPLACE TABLE afrobq.fhv_partitoned_clustered
+PARTITION BY DATE(pickup_datetime)
+CLUSTER BY pickup_datetime AS
+SELECT * FROM afrobq.fhv_ext;
+
+-- Query scans 329.93 MB
+SELECT count(*) as trips
+FROM afrobq.fhv_partitoned
+WHERE DATE(pickup_datetime) BETWEEN '2019-01-01' AND '2020-12-31';
+
+-- Query scans 329.93 MB
+SELECT count(*) as trips
+FROM afrobq.fhv_partitoned_clustered
+WHERE DATE(pickup_datetime) BETWEEN '2019-01-01' AND '2020-12-31';
+~~~~
+
 ## q.6
+
+querying data stored outside of BigQuery.
+
+1. Cloud Bigtable
+2. Cloud Storage
+3. Google Drive
+
+## q.7 
+
+It is best practice in Big Query to always cluster your data.
+
+```False```
