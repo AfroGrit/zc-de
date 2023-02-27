@@ -5,7 +5,7 @@ practicals ver 2
 ## q.1
 
 ```sql
-SELECT COUNT(*) FROM `afro-de-376122.productions.fact_trips`;
+SELECT COUNT(*) FROM `afro-de-xxxxxx.productions.fact_trips`;
 -- 61619945
 ```
 
@@ -17,7 +17,7 @@ SELECT COUNT(*) FROM `afro-de-376122.productions.fact_trips`;
 
 ```sql
 SELECT date_trunc(pickup_datetime, YEAR), count(*)
-FROM `afro-de-376122.afrodbt.dbt-fhv` 
+FROM `afro-de-xxxxxx.afrodbtdataset.dbt-fhv` 
 GROUP BY 1
 ORDER BY 1 DESC;
 1. 2020-01-01 00:00:00 UTC 14914817
@@ -28,7 +28,7 @@ ORDER BY 1 DESC;
 
 ```sql
 SELECT date_trunc(pickup_datetime, YEAR), count(*)
-FROM `afro-de-376122.afrodbtdataset.fact_fhv_trips`
+FROM `afro-de-xxxxxx.afrodbtdataset.fact_fhv_trips`
 GROUP BY 1
 ORDER BY 1 DESC;
 -- 
