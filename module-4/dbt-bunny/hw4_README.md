@@ -17,7 +17,7 @@ SELECT COUNT(*) FROM `afro-de-xxxxxx.productions.fact_trips`;
 
 ```sql
 SELECT date_trunc(pickup_datetime, YEAR), count(*)
-FROM `afro-de-xxxxxx.afrodbt.dbt-fhv` 
+FROM `afro-de-xxxxxx.afrodbtdataset.dbt-fhv` 
 GROUP BY 1
 ORDER BY 1 DESC;
 1. 2020-01-01 00:00:00 UTC 14914817
