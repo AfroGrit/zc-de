@@ -10,3 +10,5 @@ brew install scala
 3.2.2 installed
 ```
 
+Will proceed on GCP VM
+
