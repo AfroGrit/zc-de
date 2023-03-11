@@ -115,3 +115,9 @@ df_result.coalesce(1).write.parquet(output, mode='overwrite')
 #         --input_green=data/pq/green/2021/*/ \
 #         --input_yellow=data/pq/yellow/2021/*/ \
 #         --output=data/report-2021
+
+# # Stopping master and workers
+# ./sbin/stop-worker.sh
+# # no org.apache.spark.deploy.worker.Worker to stop
+# ./sbin/stop-master.sh
+# # stopping org.apache.spark.deploy.master.Master
