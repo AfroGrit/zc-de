@@ -1,16 +1,34 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[1]:
+import argparse
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
-spark = SparkSession.builder
-    .master("spark://afro-de.europe-west1-b.c.afro-de-376122.internal:7077")
-    .appName('LocalSparkCluster')
-    .getOrCreate()
+parser = argparse.ArgumentParser()
 
+parser.add_argument('--input_green', required=True)
+parser.add_argument('--input_yellow', required=True)
+parser.add_argument('--output', required=True)
+
+args = parser.parse_args()
+
+input_green = args.input_green
+input_yellow = args.input_yellow
+output = args.output
+
+# spark = SparkSession.builder \
+#     .master("spark://afro-de.europe-west1-b.c.afro-de-376122.internal:7077") \
+#     .appName('LocalSparkCluster') \
+#     .getOrCreate()
+
+# for spark submit
+spark = SparkSession.builder \
+    .appName('LocalSparkCluster_sparkSubmit') \
+    .getOrCreate()    
+
+# input_green = 'data/pq/green/*/*'
+# input_yellow = 'data/pq/yellow/*/*'
 df_green = spark.read.parquet(input_green)
 df_yellow = spark.read.parquet(input_yellow)
 
@@ -80,5 +98,20 @@ GROUP BY
     1, 2, 3
 """)
 
-
+# df_result.coalesce(1).write.parquet('data/report/revenue/', mode='overwrite')
 df_result.coalesce(1).write.parquet(output, mode='overwrite')
+
+# python sparksql_106_spark_localcluster.py \
+#     --input_green=data/pq/green/2020/*/ \
+#     --input_yellow=data/pq/yellow/2020/*/ \
+#     --output=data/report-2020
+
+# Using spark submit
+# URL="spark://afro-de.europe-west1-b.c.afro-de-376122.internal:7077"
+
+# spark-submit \
+#     --master="${URL}" \
+#     sparksql_106_spark_localcluster.py \
+#         --input_green=data/pq/green/2021/*/ \
+#         --input_yellow=data/pq/yellow/2021/*/ \
+#         --output=data/report-2021
