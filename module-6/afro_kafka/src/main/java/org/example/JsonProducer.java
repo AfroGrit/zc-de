@@ -41,6 +41,8 @@ public class JsonProducer {
     }
 
     public static void main(String[] args) throws IOException, CsvException, ExecutionException, InterruptedException {
-
+        var producer = new JsonProducer();
+        var rides = producer.getRides();
+        producer.publishRides(rides);
     }
 }
