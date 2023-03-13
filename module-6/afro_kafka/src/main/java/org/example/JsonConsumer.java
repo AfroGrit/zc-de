@@ -34,6 +34,22 @@ public class JsonConsumer {
     }
 
 
+    public void consumeFromKafka() {
+        System.out.println("Consuming form kafka started");
+        var results = consumer.poll(Duration.of(1, ChronoUnit.SECONDS));
+        var i = 0;
+        do {
+
+            for(ConsumerRecord<String, Ride> result: results) {
+                System.out.println(result.value().DOLocationID);
+            }
+            results =  consumer.poll(Duration.of(1, ChronoUnit.SECONDS));
+            System.out.println("RESULTS:::" + results.count());
+            i++;
+        }
+        while(!results.isEmpty() || i < 10);
+    }
+    
     public static void main(String[] args) {
         JsonConsumer jsonConsumer = new JsonConsumer();
         jsonConsumer.consumeFromKafka();
