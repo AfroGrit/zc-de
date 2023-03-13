@@ -15,7 +15,18 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class JsonProducer {
-
+    private Properties props = new Properties();
+    public JsonProducer() {
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "pkc-lzoyy.europe-west6.gcp.confluent.cloud:9092");
+        props.put("security.protocol", "SASL_SSL");
+        props.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username='"+Secrets.KAFKA_CLUSTER_KEY+"' password='"+Secrets.KAFKA_CLUSTER_SECRET+"';");
+        props.put("sasl.mechanism", "PLAIN");
+        props.put("client.dns.lookup", "use_all_dns_ips");
+        props.put("session.timeout.ms", "45000");
+        props.put(ProducerConfig.ACKS_CONFIG, "all");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaJsonSerializer");
+    }
 
     public List<Ride> getRides() throws IOException, CsvException {
         var ridesStream = this.getClass().getResource("/rides.csv");
@@ -23,6 +34,8 @@ public class JsonProducer {
         reader.skip(1);
         return reader.readAll().stream().map(arr -> new Ride(arr))
                 .collect(Collectors.toList());
+
+    }
 
     public void publishRides(List<Ride> rides) throws ExecutionException, InterruptedException {
         KafkaProducer<String, Ride> kafkaProducer = new KafkaProducer<String, Ride>(props);
