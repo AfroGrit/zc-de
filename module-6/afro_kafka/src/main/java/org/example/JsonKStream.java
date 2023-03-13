@@ -50,6 +50,7 @@ public class JsonKStream {
     }    
 
     public static void main(String[] args) throws InterruptedException {
-
+        var object = new JsonKStream();
+        object.countPLocation();
     }
 }
