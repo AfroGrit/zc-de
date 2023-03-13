@@ -37,6 +37,18 @@ public class JsonKStream {
         return streamsBuilder.build();
     }
 
+    public void countPLocation() throws InterruptedException {
+        var topology = createTopology();
+        var kStreams = new KafkaStreams(topology, props);
+        kStreams.start();
+        while (kStreams.state() != KafkaStreams.State.RUNNING) {
+            System.out.println(kStreams.state());
+            Thread.sleep(1000);
+        }
+        System.out.println(kStreams.state());
+        Runtime.getRuntime().addShutdownHook(new Thread(kStreams::close));
+    }    
+
     public static void main(String[] args) throws InterruptedException {
 
     }
