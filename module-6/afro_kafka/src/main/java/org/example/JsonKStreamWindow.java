@@ -33,9 +33,28 @@ public class JsonKStreamWindow {
 
     }
 
+    public Topology createTopology() {
+        StreamsBuilder streamsBuilder = new StreamsBuilder();
+        var ridesStream = streamsBuilder.stream("rides", Consumed.with(Serdes.String(), CustomSerdes.getSerde(Ride.class)));
+        var puLocationCount = ridesStream.groupByKey()
+                .windowedBy(TimeWindows.ofSizeAndGrace(Duration.ofSeconds(10), Duration.ofSeconds(5)))
+                .count().toStream();
+        var windowSerde = WindowedSerdes.timeWindowedSerdeFrom(String.class, 10*1000);
 
+        puLocationCount.to("rides-pulocation-window-count", Produced.with(windowSerde, Serdes.Long()));
+        return streamsBuilder.build();
+    }
+
+    public void countPLocationWindowed() {
+        var topology = createTopology();
+        var kStreams = new KafkaStreams(topology, props);
+        kStreams.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(kStreams::close));
+    }
 
     public static void main(String[] args) {
-
+        var object = new JsonKStreamWindow();
+        object.countPLocationWindowed();
     }
 }
